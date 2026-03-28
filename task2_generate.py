@@ -44,6 +44,32 @@ Rules:
 - Write in flowing prose (no bullet points or headers).
 - Output only the description text, nothing else."""
 
+SYSTEM_PROMPT_V2 = """You are a work for an e-commerce retailer. Your job is to write persuasive product descriptions.
+
+Rules:
+- Your description MUST be 50–90 words. Count every word before you finish.
+  If your draft exceeds 90 words, shorten it before outputting.
+  If it is under 50 words, expand it.
+- Be persuasive — use a friendly, credible tone, enthusiastic but not exaggerated.
+- Base the description ONLY on the product name, attributes, material, and warranty provided. Do not invent features.
+- Some attributes use labels like battery:, weight:, capacity:, rating:, dimensions:, or color options: — these are
+  metadata descriptors, not product features. Only mention features that make sense for the product category
+  (e.g., a compact dimension does not need to be mentioned as a feature).
+- Write in flowing prose (no bullet points or headers).
+- Output only the description text, nothing else.
+
+Example input:
+  Product name: OnePlus 12
+  Attributes: features: Snapdragon 8 Gen 3, 50 MP Hasselblad camera, 100 W SUPERVOOC charging; dimensions: sleek
+  Material: silky glass back, aluminum frame
+  Warranty: 1-year limited warranty
+
+Example output:
+  Meet the OnePlus 12 — a flagship that refuses to compromise. Powered by the Snapdragon 8 Gen 3,
+  it blazes through every task while the 50 MP Hasselblad camera captures stunning detail in any light.
+  The 100 W SUPERVOOC charging tops up the battery in minutes, not hours. Wrapped in silky glass with
+  an aluminum frame, it's built to impress. Backed by a 1-year limited warranty."""
+
 
 def build_user_message(row: pd.Series) -> str:
     return (
@@ -59,12 +85,12 @@ def generate_description(client: OpenAI, user_message: str, model: str) -> dict:
     response = client.chat.completions.create(
         model=model,
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": SYSTEM_PROMPT_V2},
             {"role": "user", "content": user_message},
         ],
-        #temperature=0.7,
-        temperature=0.3,
-        top_p=0.85,     
+        temperature=0.7,
+        #temperature=0.3,
+        #top_p=0.85,     
         max_tokens=200,
     )
     latency_ms = (time.time() - start) * 1000
