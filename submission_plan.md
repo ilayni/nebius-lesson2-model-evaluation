@@ -19,22 +19,32 @@
 | 75/76 (code) | MANAUAL_EVALUATED_PRODUCTS → MANUAL_EVALUATED_PRODUCTS |
 | 79 (md) | resultoing, espcially, Chossing, Strating, temprature, meaningfull, accurtae, critcial, conside, criteria's |
 
-### 2. Remove duplicate code cell 💬
+### 2. Remove duplicate code cell ✅
 
-Cell 31 is an exact copy of cell 34 (same `generate_description_v2` function). Replace with a comment or delete?
+Deleted cell 31 (stray duplicate of `generate_description_v2`). Cell indices shifted by -1 from here onward.
 
-### 3. Tighten AI-sounding text 💬
+### 3. Tighten AI-sounding text ✅ (partial)
 
-- **Cell 47**: Explanation-before-verdict section — verbose with numbered list. Shorten?
-- **Cell 40**: Informal commentary ("the new prompt really improved!!", "cost is not really significant"). Clean up?
-- **Cell 79**: Production recommendation list — rewrite to be more professional?
+- **Cell 46 (was 47)**: Shortened explanation-before-verdict section. ✅
+- **Cell 39 (was 40)**: Skipped — keep as is. ❌
+- **Cell 78 (was 79)**: Skipped — keep as is. ❌
 
-### 4. Fix narrative consistency (full-run model mismatch) 💬
+### 4. Fix full-run model mismatch ✅
 
-Full run (cell 69) and criterion-by-criterion (cell 75) use Llama 8B by default, but section 6.1.6 showed Qwen3 is much better (92% vs 24% agreement). Results are saved — can't re-run. Options:
-- Add notes explaining the mismatch
-- Update cell 0 companion file descriptions (currently imply Qwen3)
-- Rewrite cell 71 (vague "Note!") with proper explanation
+- Fixed cell 63 (§6.1.6): reassigns `JUDGE_MODEL = JUDGE_MODEL_V2` ✅
+- Fixed cell 68 (§6.2 full run): explicitly passes `model=JUDGE_MODEL` ✅
+- Fixed cell 74 (§6.4 criterion-by-criterion): explicitly passes `model=JUDGE_MODEL` ✅
+- Re-ran Tasks 5-6 with Qwen3 ✅
+
+### 7. Update markdown conclusions to match new Qwen3 outputs ✅
+
+| Cell | Section | Issue | Suggested Fix |
+|------|---------|-------|---------------|
+| 70 (md) | §6.2 Note | Says "only 4 out of 10 pass" — actual output is 25/50 pass | Rewrite: "Full-run pass rate is 50% (25/50). Failures driven by length (19 not-good) and grounding (9 not-good)." |
+| 76 (md) | §6.4 Note | Vague, no numbers | Add numbers: "Pass rate 7/10. Length improved (8 good vs mixed), grammar dropped slightly (9/10)." |
+| 79 (md) | §6.5 Note | Typo "ctireria"; vague | Fix typo + add numbers: "Crit-by-crit better on length (90% vs 70%) and pass/fail (7/10), but slightly worse on grammar (90% vs 100%) and grounding (50% vs 60%)." |
+| 80 (md) | §6.6 Analysis | "The-all-at-once did perform better" awkward; "find tuned" typo | Fix phrasing and typo |
+| 0 (md) | Companion files | May need updating for new .xlsx outputs | Verify after above fixes |
 
 ### 5. Delete empty trailing cell ✅
 
